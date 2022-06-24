@@ -1,6 +1,6 @@
 import React, { Component, useEffect } from "react";
 
-function About() {
+function Google() {
   useEffect(() => {
     window.location.href = "https://google.com/about";
   }, []);
@@ -13,4 +13,4 @@ function About() {
   );
 }
 
-export default About;
+export default Google;

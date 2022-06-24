@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async (request: NextApiRequest, response: NextApiResponse) => {
+const Dmkt = async (request: NextApiRequest, response: NextApiResponse) => {
   const {
     query: { utm_source, utm_medium, utm_campaign},
     method,
@@ -10,3 +10,5 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
   // do nothing fancy and simply return a string concatenation
   return response.status(200).json({ utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign });
 };
+
+export default Dmkt
