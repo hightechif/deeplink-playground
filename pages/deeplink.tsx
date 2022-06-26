@@ -1,16 +1,16 @@
-import Link from 'next/link';
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from 'next/router'
 
 const Deeplink = () => {
 
     const router = useRouter()
-    const {utm_source, utm_medium, utm_campaign, method} = router.query
+    const { utm_source, utm_medium, utm_campaign } = router.query
 
-    const protocol = "indomaretpoinku://web"
-    const url = "https://indomaretpoinku.com/Tukar-Hadiah-Scandic"
-    const deeplink = `${protocol}?url=${url}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
+    const protocol = "indomaretpoinku://"
+    const url = `https://indomaretpoinku.com/Tukar-Hadiah-Scandic?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
+    const deeplink = `${protocol}web?url=${url}`
     const data = { protocol: protocol, url: url, utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign, deeplink: deeplink };
+    console.log(data)
 
     const install = {
         android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android&hl=en&gl=ID",
@@ -26,7 +26,7 @@ const Deeplink = () => {
     useEffect(() => {
         redirecttoNativeApp()
         router.push(install_url, deeplink, {shallow: true})
-    }, []);
+    });
 
     return (
         <div>
