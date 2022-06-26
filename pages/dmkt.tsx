@@ -12,7 +12,12 @@ const Dmkt = () => {
     const deeplink = `${protocol}?url=${url}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
     const data = { protocol: protocol, url: url, utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign, deeplink: deeplink };
 
-    const install = "https://play.google.com/store/apps/details?id=mypoin.indomaret.android&hl=en&gl=ID"
+    const install = {
+        android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android&hl=en&gl=ID",
+        ios: "https://apps.apple.com/us/app/indomaret-poinku/id1280783271"
+    }
+
+    const install_url = install['ios']
 
     const redirecttoNativeApp = (/*potential params */) => {
         document.location = deeplink;
@@ -20,7 +25,7 @@ const Dmkt = () => {
 
     useEffect(() => {
         redirecttoNativeApp()
-        router.push(install, deeplink, {shallow: true})
+        router.push(install_url, deeplink, {shallow: true})
     }, []);
 
     return (
