@@ -19,13 +19,19 @@ const Deeplink = () => {
 
     const install_url = install['android']
 
-    const redirecttoNativeApp = (/*potential params */) => {
+    const redirecttoNativeApp = () => {
         document.location = deeplink;
     };
 
+    const redirecttoInstallUrl = () => {
+        window.location.href = install_url
+    }
+
     useEffect(() => {
-        // redirecttoNativeApp()
-        router.push(deeplink, install_url, {shallow: true})
+        redirecttoNativeApp()
+        setTimeout(() => {
+            redirecttoInstallUrl()
+        }, 3000)
     });
 
     return (
