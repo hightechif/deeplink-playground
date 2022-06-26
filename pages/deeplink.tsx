@@ -17,7 +17,7 @@ const Deeplink = () => {
         ios: "https://apps.apple.com/us/app/indomaret-poinku/id1280783271"
     }
 
-    const install_url = install['ios']
+    const install_url = install['android']
 
     const redirecttoNativeApp = (/*potential params */) => {
         document.location = deeplink;
