@@ -24,8 +24,8 @@ const Deeplink = () => {
     };
 
     useEffect(() => {
-        redirecttoNativeApp()
-        router.push(install_url, deeplink, {shallow: true})
+        // redirecttoNativeApp()
+        router.push(deeplink, install_url, {shallow: true})
     });
 
     return (
