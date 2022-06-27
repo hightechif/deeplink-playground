@@ -39,7 +39,7 @@ const Deeplink = () => {
         redirecttoNativeApp()
         setTimeout(() => {
             redirecttoInstallUrl()
-        }, 3000)
+        }, 1000)
     });
 
     return (
