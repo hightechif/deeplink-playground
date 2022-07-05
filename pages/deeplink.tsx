@@ -17,8 +17,8 @@ const Deeplink = () => {
     console.log(data)
     
     const install = {
-        android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android&hl=en&gl=ID",
-        ios: "https://apps.apple.com/us/app/indomaret-poinku/id1280783271"
+        android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android",
+        ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id"
     }
     
     if (currentDevice.isIos()) {
