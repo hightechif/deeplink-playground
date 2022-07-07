@@ -35,18 +35,25 @@ const Deeplink = () => {
         window.location.href = install_url
     }
 
+    const redirecttoWeb = () => {
+        window.location.href = url
+    }
+
     useEffect(() => {
-        redirecttoNativeApp()
-        setTimeout(() => {
-            redirecttoInstallUrl()
-        }, 1000)
+        if (currentDevice.isDesktop()) {
+            redirecttoWeb()
+        } else if (currentDevice.isIos() || currentDevice.isAndroid()) {
+            redirecttoNativeApp()
+            setTimeout(() => {
+                    redirecttoInstallUrl()
+            }, 2000)
+        } else {
+            redirecttoWeb()
+        }
     });
 
     return (
         <div>
-            <button onClick={redirecttoNativeApp}>
-                <a>Click here to open</a>
-            </button>
         </div>
     )
 };
