@@ -8,7 +8,6 @@ const Deeplink = () => {
     const router = useRouter()
     const { utm_source, utm_medium, utm_campaign } = router.query
     let currentDevice = useMobileDetect()
-    let install_url: string
     
     const protocol = "indomaretpoinku://"
     const url = `https://indomaretpoinku.com/Tukar-Hadiah-Scandic?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
@@ -16,23 +15,14 @@ const Deeplink = () => {
     const data = { protocol: protocol, url: url, utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign, deeplink: deeplink };
     console.log(data)
     
-    const install = {
-        android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android",
-        ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id"
-    }
-    
-    if (currentDevice.isIos()) {
-        install_url = install['ios']
-    } else {
-        install_url = install['android']
-    }
+    const install_url = "https://indomaretpoinku.com/get-the-app"
 
     const redirecttoNativeApp = () => {
         document.location = deeplink;
     };
 
-    const redirecttoInstallUrl = () => {
-        window.location.href = install_url
+    const redirecttoPlayStoreOrAppStore = () => {
+        document.location = install_url
     }
 
     const redirecttoWeb = () => {
@@ -45,7 +35,7 @@ const Deeplink = () => {
         } else if (currentDevice.isIos() || currentDevice.isAndroid()) {
             redirecttoNativeApp()
             setTimeout(() => {
-                    redirecttoInstallUrl()
+                redirecttoPlayStoreOrAppStore()
             }, 2000)
         } else {
             redirecttoWeb()
