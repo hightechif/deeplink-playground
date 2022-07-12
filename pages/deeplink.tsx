@@ -35,7 +35,8 @@ const Deeplink = () => {
         } else if (currentDevice.isIos() || currentDevice.isAndroid()) {
             redirecttoNativeApp()
             setTimeout(() => {
-                redirecttoPlayStoreOrAppStore()
+                // redirecttoPlayStoreOrAppStore()
+                redirecttoWeb()
             }, 2000)
         } else {
             redirecttoWeb()
