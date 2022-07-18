@@ -41,7 +41,7 @@ const Deeplink = () => {
         } else {
             redirecttoWeb()
         }
-    });
+    }, []);
 
     return (
         <div>
