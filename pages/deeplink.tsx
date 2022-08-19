@@ -8,7 +8,7 @@ const Deeplink = () => {
     const { utm_source, utm_medium, utm_campaign, utm_page } = router.query
     let currentDevice = useMobileDetect()
     
-    const protocol = `${process.env.NEXT_DEEPLINK_PROTOCOL}`
+    const protocol = `indomaretpoinku://`
     const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
     const deeplink = `${protocol}web?url=${url}`   
     const install_url = `${process.env.NEXT_PUBLIC_BASE}/get-the-app`
