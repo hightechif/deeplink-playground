@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from 'next/router'
-import Device from "../components/Device";
 import useMobileDetect from "../utils/useMobileDetect";
 
 const Deeplink = () => {
@@ -9,13 +8,21 @@ const Deeplink = () => {
     const { utm_source, utm_medium, utm_campaign, utm_page } = router.query
     let currentDevice = useMobileDetect()
     
-    const protocol = "indomaretpoinku://"
-    const url = `https://indomaretpoinku.com/${utm_page}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
-    const deeplink = `${protocol}web?url=${url}`
-    const data = { protocol: protocol, url: url, utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign, deeplink: deeplink };
+    const protocol = `${process.env.NEXT_DEEPLINK_PROTOCOL}`
+    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
+    const deeplink = `${protocol}web?url=${url}`   
+    const install_url = `${process.env.NEXT_PUBLIC_BASE}/get-the-app`
+    const data = { 
+        install: install_url,
+        protocol: protocol,
+        utm_page: utm_page, 
+        utm_source: utm_source, 
+        utm_medium: utm_medium, 
+        utm_campaign: utm_campaign, 
+        url: url,
+        deeplink: deeplink
+    };
     console.log(data)
-    
-    const install_url = "https://indomaretpoinku.com/get-the-app"
 
     const redirecttoNativeApp = () => {
         document.location = deeplink;
@@ -29,24 +36,33 @@ const Deeplink = () => {
         window.location.href = url
     }
 
+    const mounted = useRef(false);
     useEffect(() => {
-        if (currentDevice.isDesktop()) {
-            redirecttoWeb()
-        } else if (currentDevice.isIos() || currentDevice.isAndroid()) {
-            redirecttoNativeApp()
-            setTimeout(() => {
-                // redirecttoPlayStoreOrAppStore()
-                redirecttoWeb()
-            }, 2000)
+        if (!mounted.current) {
+            // do componentDidMount;
+            
+            mounted.current = true;
+        }
+
+        // do componentDidUpdate;
+        if (!currentDevice.isDesktop()) {
+            console.log("Open on Mobile")
+            try {
+                if (utm_page != undefined) {
+                    redirecttoNativeApp()
+                }
+            } catch (error) {
+                redirecttoPlayStoreOrAppStore()
+            }
         } else {
-            redirecttoWeb()
+            console.log("Open on Desktop")
+            if (utm_page != undefined) {
+                redirecttoWeb()
+            }
         }
     });
 
-    return (
-        <div>
-        </div>
-    )
+    return <></>
 };
 
 export default Deeplink;
