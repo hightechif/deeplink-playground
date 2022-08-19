@@ -6,11 +6,11 @@ import useMobileDetect from "../utils/useMobileDetect";
 const Deeplink = () => {
 
     const router = useRouter()
-    const { utm_source, utm_medium, utm_campaign } = router.query
+    const { utm_source, utm_medium, utm_campaign, utm_page } = router.query
     let currentDevice = useMobileDetect()
     
     const protocol = "indomaretpoinku://"
-    const url = `https://indomaretpoinku.com/Tukar-Hadiah-Scandic?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
+    const url = `https://indomaretpoinku.com/${utm_page}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
     const deeplink = `${protocol}web?url=${url}`
     const data = { protocol: protocol, url: url, utm_source: utm_source, utm_medium: utm_medium, utm_campaign: utm_campaign, deeplink: deeplink };
     console.log(data)
@@ -41,7 +41,7 @@ const Deeplink = () => {
         } else {
             redirecttoWeb()
         }
-    }, []);
+    });
 
     return (
         <div>
