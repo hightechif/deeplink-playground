@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from 'next/router'
 import useMobileDetect from "../utils/useMobileDetect";
 
@@ -13,7 +13,7 @@ const Deeplink = () => {
     const utm_campaign = (query.utm_campaign != undefined) ? `utm_campaign=${query.utm_campaign}` : ''
     
     const protocol = `indomaretpoinku://`
-    const install_url = "https://indomaretpoinku.com/get-the-app"
+    const install_url = {android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
     const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?${utm_source}${utm_medium}${utm_campaign}`
     const deeplink = `${protocol}web?url=${url}`   
     const data = { 
@@ -31,8 +31,12 @@ const Deeplink = () => {
         document.location = deeplink;
     };
 
-    const redirectToPlaystoreOrAppstore = () => {
-        document.location = install_url
+    const redirectToPlayStore = () => {
+        document.location = install_url["android"]
+    }
+
+    const redirecToAppStore = () => {
+        document.location = install_url["ios"]
     }
 
     const redirectToWeb = () => {
@@ -42,12 +46,15 @@ const Deeplink = () => {
     useEffect(() => {
         console.log(data)
         if (currentDevice.isMobile()) {
-            try {
-                if (utm_page !== '') {
-                    redirectToNativeApp()
-                }
-            } catch (error) {
-                redirectToPlaystoreOrAppstore()
+            if (utm_page !== '') {
+                redirectToNativeApp()
+                setTimeout(() => {
+                    if (currentDevice.isIos()) {
+                        redirecToAppStore()
+                    } else {
+                        redirectToPlayStore()
+                    }
+                }, 2000)
             }
         } else {
             if (utm_page !== '') {
