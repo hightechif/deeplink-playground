@@ -9,9 +9,9 @@ const Deeplink = () => {
     let currentDevice = useMobileDetect()
     
     const protocol = `indomaretpoinku://`
-    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?utm_source=${utm_source}&utm_medium=${utm_medium}&utm_campaign=${utm_campaign}`
+    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?utm_medium=${utm_medium}&utm_campaign=${utm_campaign}&utm_source=${utm_source}`
     const deeplink = `${protocol}web?url=${url}`   
-    const install_url = `${process.env.NEXT_PUBLIC_BASE}/get-the-app`
+    const install_url = "https://indomaretpoinku.com/get-the-app"
     const data = { 
         install: install_url,
         protocol: protocol,
@@ -45,7 +45,7 @@ const Deeplink = () => {
         }
 
         // do componentDidUpdate;
-        if (!currentDevice.isDesktop()) {
+        if (currentDevice.isIos() || currentDevice.isAndroid()) {
             console.log("Open on Mobile")
             try {
                 if (utm_page != undefined) {
