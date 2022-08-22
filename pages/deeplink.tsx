@@ -4,21 +4,23 @@ import useMobileDetect from "../utils/useMobileDetect";
 
 const Deeplink = () => {
 
+    const regex = new RegExp(`/(gclid|utm_[a-z]+)=[-_A-z0-9+()%.]+&?/g`)
+
     const router = useRouter()
-    const { utm_source, utm_medium, utm_campaign, utm_page } = router.query
+    const { query } = router
     let currentDevice = useMobileDetect()
     
     const protocol = `indomaretpoinku://`
-    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?utm_medium=${utm_medium}&utm_campaign=${utm_campaign}&utm_source=${utm_source}`
+    const url = `${process.env.NEXT_PUBLIC_BASE}/${query.utm_page}?utm_medium=${query.utm_medium}&utm_campaign=${query.utm_campaign}&utm_source=${query.utm_source}`
     const deeplink = `${protocol}web?url=${url}`   
     const install_url = "https://indomaretpoinku.com/get-the-app"
     const data = { 
         install: install_url,
         protocol: protocol,
-        utm_page: utm_page, 
-        utm_source: utm_source, 
-        utm_medium: utm_medium, 
-        utm_campaign: utm_campaign, 
+        utm_page: query.utm_page, 
+        utm_source: query.utm_source, 
+        utm_medium: query.utm_medium, 
+        utm_campaign: query.utm_campaign, 
         url: url,
         deeplink: deeplink
     };
@@ -48,7 +50,7 @@ const Deeplink = () => {
         if (currentDevice.isIos() || currentDevice.isAndroid()) {
             console.log("Open on Mobile")
             try {
-                if (utm_page != undefined) {
+                if (query.utm_page !== undefined) {
                     redirecttoNativeApp()
                 }
             } catch (error) {
@@ -56,7 +58,7 @@ const Deeplink = () => {
             }
         } else {
             console.log("Open on Desktop")
-            if (utm_page != undefined) {
+            if (query.utm_page !== undefined) {
                 redirecttoWeb()
             }
         }
