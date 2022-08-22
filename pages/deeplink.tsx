@@ -1,19 +1,21 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from 'next/router'
 import useMobileDetect from "../utils/useMobileDetect";
 
 const Deeplink = () => {
-
-    const regex = new RegExp(`/(gclid|utm_[a-z]+)=[-_A-z0-9+()%.]+&?/g`)
-
     const router = useRouter()
     const { query } = router
     let currentDevice = useMobileDetect()
+
+    const utm_page = (query.utm_page != undefined) ? `${query.utm_page}` : ''
+    const utm_source = (query.utm_source != undefined) ? `utm_source=${query.utm_source}&` : ''
+    const utm_medium = (query.utm_medium != undefined) ?`utm_medium=${query.utm_medium}&` : ''
+    const utm_campaign = (query.utm_campaign != undefined) ? `utm_campaign=${query.utm_campaign}` : ''
     
     const protocol = `indomaretpoinku://`
-    const url = `${process.env.NEXT_PUBLIC_BASE}/${query.utm_page}?utm_medium=${query.utm_medium}&utm_campaign=${query.utm_campaign}&utm_source=${query.utm_source}`
-    const deeplink = `${protocol}web?url=${url}`   
     const install_url = "https://indomaretpoinku.com/get-the-app"
+    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?${utm_source}${utm_medium}${utm_campaign}`
+    const deeplink = `${protocol}web?url=${url}`   
     const data = { 
         install: install_url,
         protocol: protocol,
@@ -24,45 +26,35 @@ const Deeplink = () => {
         url: url,
         deeplink: deeplink
     };
-    console.log(data)
 
-    const redirecttoNativeApp = () => {
+    const redirectToNativeApp = () => {
         document.location = deeplink;
     };
 
-    const redirecttoPlayStoreOrAppStore = () => {
+    const redirectToPlaystoreOrAppstore = () => {
         document.location = install_url
     }
 
-    const redirecttoWeb = () => {
+    const redirectToWeb = () => {
         window.location.href = url
     }
 
-    const mounted = useRef(false);
     useEffect(() => {
-        if (!mounted.current) {
-            // do componentDidMount;
-            
-            mounted.current = true;
-        }
-
-        // do componentDidUpdate;
-        if (currentDevice.isIos() || currentDevice.isAndroid()) {
-            console.log("Open on Mobile")
+        console.log(data)
+        if (currentDevice.isMobile()) {
             try {
-                if (query.utm_page !== undefined) {
-                    redirecttoNativeApp()
+                if (utm_page !== '') {
+                    redirectToNativeApp()
                 }
             } catch (error) {
-                redirecttoPlayStoreOrAppStore()
+                redirectToPlaystoreOrAppstore()
             }
         } else {
-            console.log("Open on Desktop")
-            if (query.utm_page !== undefined) {
-                redirecttoWeb()
+            if (utm_page !== '') {
+                redirectToWeb()
             }
         }
-    });
+    }, [query]);
 
     return <></>
 };
