@@ -11,6 +11,7 @@ const Deeplink = () => {
     const utm_source = (query.utm_source != undefined) ? `utm_source=${query.utm_source}&` : ''
     const utm_medium = (query.utm_medium != undefined) ?`utm_medium=${query.utm_medium}&` : ''
     const utm_campaign = (query.utm_campaign != undefined) ? `utm_campaign=${query.utm_campaign}` : ''
+    const with_install = (query.need_install != undefined) ? `need_install=${query.need_install}` : 'no'
     
     const protocol = `indomaretpoinku://`
     const install_url = {android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
@@ -49,12 +50,16 @@ const Deeplink = () => {
             if (utm_page !== '') {
                 redirectToNativeApp()
                 setTimeout(() => {
-                    if (currentDevice.isIos()) {
-                        redirecToAppStore()
+                    if (with_install === "yes") {
+                        if (currentDevice.isIos()) {
+                            redirecToAppStore()
+                        } else {
+                            redirectToPlayStore()
+                        }
                     } else {
-                        redirectToPlayStore()
+                        redirectToWeb()
                     }
-                }, 2000)
+                }, 2500)
             }
         } else {
             if (utm_page !== '') {
