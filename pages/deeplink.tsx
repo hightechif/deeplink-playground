@@ -11,7 +11,7 @@ const Deeplink = () => {
     const utm_source = (query.utm_source != undefined) ? `utm_source=${query.utm_source}&` : ''
     const utm_medium = (query.utm_medium != undefined) ?`utm_medium=${query.utm_medium}&` : ''
     const utm_campaign = (query.utm_campaign != undefined) ? `utm_campaign=${query.utm_campaign}` : ''
-    const with_install = (query.need_install != undefined) ? `need_install=${query.need_install}` : 'no'
+    const with_install = (query.with_install != undefined) ? query.with_install : 'no'
     
     const protocol = `indomaretpoinku://`
     const install_url = {android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
@@ -29,7 +29,7 @@ const Deeplink = () => {
     };
 
     const redirectToNativeApp = () => {
-        document.location = deeplink;
+        document.location = deeplink
     };
 
     const redirectToPlayStore = () => {
@@ -47,10 +47,11 @@ const Deeplink = () => {
     useEffect(() => {
         console.log(data)
         if (currentDevice.isMobile()) {
+            console.log("run on mobile")
             if (utm_page !== '') {
                 redirectToNativeApp()
                 setTimeout(() => {
-                    if (with_install === "yes") {
+                    if (with_install !== 'no') {
                         if (currentDevice.isIos()) {
                             redirecToAppStore()
                         } else {
@@ -62,11 +63,12 @@ const Deeplink = () => {
                 }, 2500)
             }
         } else {
+            console.log("run on desktop")
             if (utm_page !== '') {
                 redirectToWeb()
             }
         }
-    }, [query]);
+    });
 
     return <></>
 };
