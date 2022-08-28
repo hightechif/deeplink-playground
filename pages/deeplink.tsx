@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import { useRouter } from 'next/router'
-// import useMobileDetect from "../utils/useMobileDetect";
-import { isMobile, isIOS, isAndroid } from "react-device-detect";
+import { isMobile, isIOS } from "react-device-detect";
 
 const Deeplink = () => {
     const router = useRouter()
-    // let currentDevice = useMobileDetect()
 
     const utm_page = (router.query.utm_page !== undefined) ? `${router.query.utm_page}` : undefined
     const utm_source_query = (router.query.utm_source !== undefined) ? `utm_source=${router.query.utm_source}&` : ''
@@ -49,9 +47,9 @@ const Deeplink = () => {
             if (isMobile) {
                 console.log("run on mobile")
                 console.log("open app with deeplink")
-                // redirectToNativeApp()
-                setTimeout(() => {
-                    if (with_install === 'yes') {
+                redirectToNativeApp()
+                if (with_install === 'yes') {
+                    setTimeout(() => {
                         if (isIOS) {
                             console.log("go to ios app store")
                             redirecToAppStore()
@@ -59,15 +57,16 @@ const Deeplink = () => {
                             console.log("go to android play store")
                             redirectToPlayStore()
                         }
-                    } else {
-                        console.log("go to website on mobile")
-                        redirectToWeb()
-                    }
-                }, 2500)
+                    }, 2500)
+                } else {
+                    console.log("go to website on mobile")
+                    redirectToWeb()
+                }
+
             } else {
                 console.log("run on desktop web")
                 console.log("go to website on desktop")
-                // redirectToWeb()
+                redirectToWeb()
             }
         }
     });
