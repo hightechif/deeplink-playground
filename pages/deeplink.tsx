@@ -1,30 +1,29 @@
 import React, { useEffect } from "react";
 import { useRouter } from 'next/router'
-import useMobileDetect from "../utils/useMobileDetect";
+// import useMobileDetect from "../utils/useMobileDetect";
+import { isMobile, isIOS, isAndroid } from "react-device-detect";
 
 const Deeplink = () => {
     const router = useRouter()
-    const { query } = router
-    let currentDevice = useMobileDetect()
+    // let currentDevice = useMobileDetect()
 
-    const utm_page = (query.utm_page != undefined) ? `${query.utm_page}` : ''
-    const utm_source = (query.utm_source != undefined) ? `utm_source=${query.utm_source}&` : ''
-    const utm_medium = (query.utm_medium != undefined) ?`utm_medium=${query.utm_medium}&` : ''
-    const utm_campaign = (query.utm_campaign != undefined) ? `utm_campaign=${query.utm_campaign}` : ''
-    const with_install = (query.with_install != undefined) ? query.with_install : 'no'
-    
-    const protocol = `indomaretpoinku://`
-    const install_url = {android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
-    const url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?${utm_source}${utm_medium}${utm_campaign}`
-    const deeplink = `${protocol}web?url=${url}`   
-    const data = { 
-        install: install_url,
-        protocol: protocol,
-        utm_page: query.utm_page, 
-        utm_source: query.utm_source, 
-        utm_medium: query.utm_medium, 
-        utm_campaign: query.utm_campaign, 
-        url: url,
+    const utm_page = (router.query.utm_page !== undefined) ? `${router.query.utm_page}` : undefined
+    const utm_source_query = (router.query.utm_source !== undefined) ? `utm_source=${router.query.utm_source}&` : ''
+    const utm_medium_query = (router.query.utm_medium !== undefined) ? `utm_medium=${router.query.utm_medium}&` : ''
+    const utm_campaign_query = (router.query.utm_campaign !== undefined) ? `utm_campaign=${router.query.utm_campaign}` : ''
+    const with_install = (router.query.with_install !== undefined) ? router.query.with_install : ''
+
+    const scheme = `indomaretpoinku://`
+    const install_url = { android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
+    const web_url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?${utm_source_query}${utm_medium_query}${utm_campaign_query}`
+    const deeplink = `${scheme}web?url=${web_url}`
+    const data = {
+        install_url: install_url,
+        utm_page: router.query.utm_page,
+        utm_source: router.query.utm_source,
+        utm_medium: router.query.utm_medium,
+        utm_campaign: router.query.utm_campaign,
+        web_url: web_url,
         deeplink: deeplink
     };
 
@@ -41,31 +40,34 @@ const Deeplink = () => {
     }
 
     const redirectToWeb = () => {
-        window.location.href = url
+        window.location.href = web_url
     }
 
     useEffect(() => {
-        console.log(data)
-        if (currentDevice.isMobile()) {
-            console.log("run on mobile")
-            if (utm_page !== '') {
-                redirectToNativeApp()
+        if (utm_page) {
+            console.log(data)
+            if (isMobile) {
+                console.log("run on mobile")
+                console.log("open app with deeplink")
+                // redirectToNativeApp()
                 setTimeout(() => {
-                    if (with_install !== 'no') {
-                        if (currentDevice.isIos()) {
+                    if (with_install === 'yes') {
+                        if (isIOS) {
+                            console.log("go to ios app store")
                             redirecToAppStore()
                         } else {
+                            console.log("go to android play store")
                             redirectToPlayStore()
                         }
                     } else {
+                        console.log("go to website on mobile")
                         redirectToWeb()
                     }
                 }, 2500)
-            }
-        } else {
-            console.log("run on desktop")
-            if (utm_page !== '') {
-                redirectToWeb()
+            } else {
+                console.log("run on desktop web")
+                console.log("go to website on desktop")
+                // redirectToWeb()
             }
         }
     });
