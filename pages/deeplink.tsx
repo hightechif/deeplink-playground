@@ -11,8 +11,8 @@ const Deeplink = () => {
     const utm_campaign_query = (router.query.utm_campaign !== undefined) ? `utm_campaign=${router.query.utm_campaign}` : ''
     const with_install = (router.query.with_install !== undefined) ? router.query.with_install : ''
 
-    const scheme = `indomaretpoinku://`
-    const install_url = { android: "https://play.google.com/store/apps/details?id=mypoin.indomaret.android", ios: "https://apps.apple.com/id/app/mypoin/id1280783271?l=id" }
+    const scheme = `${process.env.NEXT_PUBLIC_DEEPLINK_SCHEME}`
+    const install_url = { ios: `${process.env.NEXT_PUBLIC_APP_STRORE}`, android: `${process.env.NEXT_PUBLIC_PLAY_STORE}` }
     const web_url = `${process.env.NEXT_PUBLIC_BASE}/${utm_page}?${utm_source_query}${utm_medium_query}${utm_campaign_query}`
     const deeplink = `${scheme}web?url=${web_url}`
     const data = {
